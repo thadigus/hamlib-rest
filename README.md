@@ -1,0 +1,246 @@
+# 📡 Hamlib REST API Server
+
+### **This is not a client application.**
+
+### A FastAPI-based authenticated REST wrapper for Hamlib rig control
+
+Hamlib REST API is a Python based REST API for Hamlib, written with FastAPI, supporting both OpenAPI and Swagger. This project is written to make the Hamlib library more accessible for frontend web frameworks such as React. This also has a convient second function of becoming a server for multiple client front ends to connect and operate amatuer radio transcievers.
+
+This project provides a fully authenticated **REST API** for controlling amateur radio equipment via **Hamlib**, with complete support for:
+
+* Frequency control
+* Mode/width control
+* VFO selection
+* Split operation
+* Levels (RF power, mic gain, etc.)
+* RIT/XIT
+* PTT
+* Repeater offset/shift
+* Power state
+* Configuration parameters
+
+All rig commands are exposed as **REST endpoints**, and the server includes **session-based authentication**, **USB device discovery**, and **auto-generated OpenAPI documentation**.
+
+---
+
+# 🚀 Features
+
+### ✔ Full Hamlib Capability Exposure
+
+Every major rig control function is wrapped:
+
+* get/set frequency
+* get/set mode & filter width
+* get/set VFO
+* get/set split (mode, TX freq, TX VFO)
+* get/set RIT and XIT
+* get/set PTT
+* get/set power
+* get/set repeater settings
+* get/set levels
+* Hamlib configuration parameters
+
+### ✔ Session-based Rig Instances
+
+Each authenticated user session maintains its own rig object.
+Multiple rigs / users can operate in parallel.
+
+### ✔ Auto-Generated Swagger UI
+
+Navigate to: <http://localhost:8080/docs>
+
+To explore and interact with all rig commands.
+
+---
+
+# 📁 Project Structure
+
+```
+.
+├── main.py                    # FastAPI application with all endpoints
+├── lib/
+│   ├── auth.py                # Session authentication
+│   ├── hamlib_rig.py          # Pythonic wrapper around Hamlib.Rig
+│   └── rig_manager.py         # Rig lifecycle management
+├── schemas.py                 # Pydantic models for request/response bodies
+├── Dockerfile                 # Docker file to build the project and run in a container
+└── README.md                  # This file
+```
+
+---
+
+# 🔧 Installation
+
+### Docker Implementation (Recommended)
+
+This project has been built from the ground up to run on Docker. You can simply build the container and run it, passing through whatever devices you would like, or handing it `--privileged`.
+
+```bash
+docker build -t hamlib-rest ./
+docker run --privileged -p 8080:8080
+```
+
+Navigate to: <http://localhost:8080/docs>
+
+---
+
+# 🔐 Authentication
+
+This server uses simple session-based authentication.
+
+1. Login to create a session:
+
+```
+POST /login
+```
+
+The server returns:
+
+```json
+{
+  "session_id": "abcdef123456",
+  "user": "..."
+}
+```
+
+2. Use this `session_id` as a query parameter for all rig commands:
+
+```
+GET /rig/frequency?session_id=abcdef123456
+```
+
+Sessions also act as namespaces:
+each session gets its own rig instance.
+
+---
+
+# ⚙️ Initialize the Rig
+
+Before sending rig commands you must initialize it:
+
+```
+POST /rig/init?session_id=abcdef123456
+```
+
+Body:
+
+```json
+{
+  "model": 229,
+  "port": "/dev/ttyUSB0",
+  "baud": 4800
+}
+```
+
+Supports any Hamlib rig model number.
+
+---
+
+# 📡 Rig Commands Overview
+
+Once initialized, you can:
+
+### Frequency
+
+```
+GET  /rig/frequency
+POST /rig/frequency
+```
+
+### Mode
+
+```
+GET  /rig/mode
+POST /rig/mode
+```
+
+### VFO
+
+```
+GET  /rig/vfo
+POST /rig/vfo
+```
+
+### Split
+
+```
+GET  /rig/split
+POST /rig/split
+```
+
+### Levels
+
+```
+GET  /rig/level
+POST /rig/level
+```
+
+### RIT / XIT
+
+```
+GET  /rig/rit
+POST /rig/rit
+```
+
+```
+GET  /rig/xit
+POST /rig/xit
+```
+
+### PTT
+
+```
+GET  /rig/ptt
+POST /rig/ptt
+```
+
+### Power
+
+```
+GET  /rig/power
+POST /rig/power
+```
+
+### Repeater
+
+```
+GET  /rig/repeater
+POST /rig/repeater
+```
+
+### Configuration Parameters
+
+```
+GET  /rig/config/params
+POST /rig/config
+```
+
+---
+
+# 🔥 Example Use Case
+
+This REST server is ideal for:
+
+* Web-controlled ham radio dashboards
+* Remote station control
+* Python/Javascript rig automation
+* Logging software
+* Node-RED or Home Assistant integrations
+* Integrating Hamlib with custom UIs or cloud services
+
+---
+
+# 🤝 Contributing
+
+Pull requests are welcome!
+Please open an issue for:
+
+* New rig commands
+* Missing Hamlib features
+* API design improvements
+
+---
+
+# 📄 License
+
+MIT License — Free to use in any project.
