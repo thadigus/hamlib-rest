@@ -1,0 +1,914 @@
+openapi: 3.1.0
+info:
+  title: Hamlib REST API Server
+  description: REST API for Hamlib rig control
+  version: "1.0"
+paths:
+  /login:
+    post:
+      tags:
+        - Auth
+      summary: Login
+      operationId: login_login_post
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+        - HTTPBasic: []
+  /devices/usb:
+    get:
+      tags:
+        - System
+      summary: List USB serial devices
+      operationId: list_usb_devices_devices_usb_get
+      parameters:
+        - required: true
+          schema:
+            type: string
+            title: Session Id
+          name: session_id
+          in: query
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+  /rig/init:
+    post:
+      tags:
+        - Rig
+      summary: Initialize rig connection
+      operationId: rig_init_rig_init_post
+      parameters:
+        - required: true
+          schema:
+            type: string
+            title: Session Id
+          name: session_id
+          in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InitRigRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+  /rig/close:
+    post:
+      tags:
+        - Rig
+      summary: Rig Close
+      operationId: rig_close_rig_close_post
+      parameters:
+        - required: true
+          schema:
+            type: string
+            title: Session Id
+          name: session_id
+          in: query
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+  /rig/frequency:
+    get:
+      tags:
+        - Frequency
+      summary: Get Freq
+      operationId: get_freq_rig_frequency_get
+      parameters:
+        - required: true
+          schema:
+            type: string
+            title: Session Id
+          name: session_id
+          in: query
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Frequency"
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+    post:
+      tags:
+        - Frequency
+      summary: Set Freq
+      operationId: set_freq_rig_frequency_post
+      parameters:
+        - required: true
+          schema:
+            type: string
+            title: Session Id
+          name: session_id
+          in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Frequency"
+        required: true
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Frequency"
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+  /rig/vfo:
+    get:
+      tags:
+        - VFO
+      summary: Get Vfo
+      operationId: get_vfo_rig_vfo_get
+      parameters:
+        - required: true
+          schema:
+            type: string
+            title: Session Id
+          name: session_id
+          in: query
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+    post:
+      tags:
+        - VFO
+      summary: Set Vfo
+      operationId: set_vfo_rig_vfo_post
+      parameters:
+        - required: true
+          schema:
+            type: string
+            title: Vfo
+          name: vfo
+          in: query
+        - required: true
+          schema:
+            type: string
+            title: Session Id
+          name: session_id
+          in: query
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+  /rig/mode:
+    get:
+      tags:
+        - Mode
+      summary: Get Mode
+      operationId: get_mode_rig_mode_get
+      parameters:
+        - required: true
+          schema:
+            type: string
+            title: Session Id
+          name: session_id
+          in: query
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Mode"
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+    post:
+      tags:
+        - Mode
+      summary: Set Mode
+      operationId: set_mode_rig_mode_post
+      parameters:
+        - required: true
+          schema:
+            type: string
+            title: Session Id
+          name: session_id
+          in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Mode"
+        required: true
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Mode"
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+  /rig/level:
+    get:
+      tags:
+        - Levels
+      summary: Get Level
+      operationId: get_level_rig_level_get
+      parameters:
+        - required: true
+          schema:
+            type: integer
+            title: Level Flag
+          name: level_flag
+          in: query
+        - required: true
+          schema:
+            type: string
+            title: Session Id
+          name: session_id
+          in: query
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+    post:
+      tags:
+        - Levels
+      summary: Set Level
+      operationId: set_level_rig_level_post
+      parameters:
+        - required: true
+          schema:
+            type: string
+            title: Session Id
+          name: session_id
+          in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LevelChange"
+        required: true
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+  /rig/split:
+    get:
+      tags:
+        - Split
+      summary: Get Split
+      operationId: get_split_rig_split_get
+      parameters:
+        - required: true
+          schema:
+            type: string
+            title: Session Id
+          name: session_id
+          in: query
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SplitConfig"
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+    post:
+      tags:
+        - Split
+      summary: Set Split
+      operationId: set_split_rig_split_post
+      parameters:
+        - required: true
+          schema:
+            type: string
+            title: Session Id
+          name: session_id
+          in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SplitConfig"
+        required: true
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+  /rig/rit:
+    get:
+      tags:
+        - RIT
+      summary: Get Rit
+      operationId: get_rit_rig_rit_get
+      parameters:
+        - required: true
+          schema:
+            type: string
+            title: Session Id
+          name: session_id
+          in: query
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RIT"
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+    post:
+      tags:
+        - RIT
+      summary: Set Rit
+      operationId: set_rit_rig_rit_post
+      parameters:
+        - required: true
+          schema:
+            type: string
+            title: Session Id
+          name: session_id
+          in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RIT"
+        required: true
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+  /rig/xit:
+    get:
+      tags:
+        - XIT
+      summary: Get Xit
+      operationId: get_xit_rig_xit_get
+      parameters:
+        - required: true
+          schema:
+            type: string
+            title: Session Id
+          name: session_id
+          in: query
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/XIT"
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+    post:
+      tags:
+        - XIT
+      summary: Set Xit
+      operationId: set_xit_rig_xit_post
+      parameters:
+        - required: true
+          schema:
+            type: string
+            title: Session Id
+          name: session_id
+          in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/XIT"
+        required: true
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+  /rig/repeater:
+    get:
+      tags:
+        - Repeater
+      summary: Get Repeater
+      operationId: get_repeater_rig_repeater_get
+      parameters:
+        - required: true
+          schema:
+            type: string
+            title: Session Id
+          name: session_id
+          in: query
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RepeaterConfig"
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+    post:
+      tags:
+        - Repeater
+      summary: Set Repeater
+      operationId: set_repeater_rig_repeater_post
+      parameters:
+        - required: true
+          schema:
+            type: string
+            title: Session Id
+          name: session_id
+          in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RepeaterConfig"
+        required: true
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+  /rig/ptt:
+    get:
+      tags:
+        - PTT
+      summary: Get Ptt
+      operationId: get_ptt_rig_ptt_get
+      parameters:
+        - required: true
+          schema:
+            type: string
+            title: Session Id
+          name: session_id
+          in: query
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PTTState"
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+    post:
+      tags:
+        - PTT
+      summary: Set Ptt
+      operationId: set_ptt_rig_ptt_post
+      parameters:
+        - required: true
+          schema:
+            type: string
+            title: Session Id
+          name: session_id
+          in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PTTState"
+        required: true
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+  /rig/power:
+    get:
+      tags:
+        - Power
+      summary: Get Power
+      operationId: get_power_rig_power_get
+      parameters:
+        - required: true
+          schema:
+            type: string
+            title: Session Id
+          name: session_id
+          in: query
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PowerState"
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+    post:
+      tags:
+        - Power
+      summary: Set Power
+      operationId: set_power_rig_power_post
+      parameters:
+        - required: true
+          schema:
+            type: string
+            title: Session Id
+          name: session_id
+          in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PowerState"
+        required: true
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+  /rig/config/params:
+    get:
+      tags:
+        - Configuration
+      summary: Get Config Params
+      operationId: get_config_params_rig_config_params_get
+      parameters:
+        - required: true
+          schema:
+            type: string
+            title: Session Id
+          name: session_id
+          in: query
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+  /rig/config:
+    post:
+      tags:
+        - Configuration
+      summary: Set Config
+      operationId: set_config_rig_config_post
+      parameters:
+        - required: true
+          schema:
+            type: string
+            title: Name
+          name: name
+          in: query
+        - required: true
+          schema:
+            type: string
+            title: Value
+          name: value
+          in: query
+        - required: true
+          schema:
+            type: string
+            title: Session Id
+          name: session_id
+          in: query
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+components:
+  schemas:
+    Frequency:
+      properties:
+        frequency:
+          type: number
+          title: Frequency
+          description: Frequency in Hz
+      type: object
+      required:
+        - frequency
+      title: Frequency
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: "#/components/schemas/ValidationError"
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    InitRigRequest:
+      properties:
+        model:
+          type: integer
+          title: Model
+          description: Hamlib rig model number
+        port:
+          type: string
+          title: Port
+          description: Serial/USB device path
+        baud:
+          type: integer
+          title: Baud
+          description: Baud rate
+      type: object
+      required:
+        - model
+      title: InitRigRequest
+    LevelChange:
+      properties:
+        level_flag:
+          type: integer
+          title: Level Flag
+          description: Hamlib RIG_LEVEL_* flag
+        value:
+          type: number
+          title: Value
+          description: Level value
+      type: object
+      required:
+        - level_flag
+        - value
+      title: LevelChange
+    Mode:
+      properties:
+        mode:
+          allOf:
+            - $ref: "#/components/schemas/RigMode"
+          description: Operating mode (USB, FM, AM, etc.)
+        width:
+          type: integer
+          title: Width
+          description: Filter width
+      type: object
+      required:
+        - mode
+        - width
+      title: Mode
+    PTTState:
+      properties:
+        state:
+          $ref: "#/components/schemas/PTTStateEnum"
+      type: object
+      required:
+        - state
+      title: PTTState
+    PTTStateEnum:
+      type: integer
+      enum:
+        - 0
+        - 1
+      title: PTTStateEnum
+      description: An enumeration.
+    PowerState:
+      properties:
+        state:
+          $ref: "#/components/schemas/PowerStateEnum"
+      type: object
+      required:
+        - state
+      title: PowerState
+    PowerStateEnum:
+      type: integer
+      enum:
+        - 0
+        - 1
+        - 2
+      title: PowerStateEnum
+      description: An enumeration.
+    RIT:
+      properties:
+        offset:
+          type: integer
+          title: Offset
+      type: object
+      required:
+        - offset
+      title: RIT
+    RepeaterConfig:
+      properties:
+        shift:
+          type: integer
+          title: Shift
+        offset:
+          type: integer
+          title: Offset
+      type: object
+      title: RepeaterConfig
+    RigMode:
+      type: string
+      enum:
+        - LSB
+        - USB
+        - CW
+        - CWR
+        - FM
+        - AM
+        - DIG
+        - PKT
+        - RTTY
+        - RTTYR
+        - SAM
+        - DRM
+      title: RigMode
+      description: An enumeration.
+    SplitConfig:
+      properties:
+        tx_freq:
+          type: number
+          title: Tx Freq
+        tx_vfo:
+          type: string
+          title: Tx Vfo
+        mode:
+          $ref: "#/components/schemas/RigMode"
+        width:
+          type: integer
+          title: Width
+      type: object
+      title: SplitConfig
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+              - type: string
+              - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+        - loc
+        - msg
+        - type
+      title: ValidationError
+    XIT:
+      properties:
+        offset:
+          type: integer
+          title: Offset
+      type: object
+      required:
+        - offset
+      title: XIT
+  securitySchemes:
+    HTTPBasic:
+      type: http
+      scheme: basic
