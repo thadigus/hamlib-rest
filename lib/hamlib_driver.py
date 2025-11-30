@@ -10,18 +10,25 @@ class HamlibRig:
     """
 
     HAMLIB_MODE_MAP = {
-        Hamlib.RIG_MODE_LSB: RigMode.LSB,
-        Hamlib.RIG_MODE_USB: RigMode.USB,
+        Hamlib.RIG_MODE_AM: RigMode.AM,
+        Hamlib.RIG_MODE_C4FM: RigMode.C4FM,
         Hamlib.RIG_MODE_CW: RigMode.CW,
         Hamlib.RIG_MODE_CWR: RigMode.CWR,
+        Hamlib.RIG_MODE_DSTAR: RigMode.DSTAR,
         Hamlib.RIG_MODE_FM: RigMode.FM,
-        Hamlib.RIG_MODE_AM: RigMode.AM,
-        # Hamlib.RIG_MODE_DIG: RigMode.DIG,
-        # Hamlib.RIG_MODE_PKT: RigMode.PKT,
-        # Hamlib.RIG_MODE_RTTY: RigMode.RTTY,
-        # Hamlib.RIG_MODE_RTTYR: RigMode.RTTYR,
-        # Hamlib.RIG_MODE_SAM: RigMode.SAM,
-        # Hamlib.RIG_MODE_DRM: RigMode.DRM,
+        Hamlib.RIG_MODE_FMN: RigMode.FMN,
+        Hamlib.RIG_MODE_LSB: RigMode.LSB,
+        Hamlib.RIG_MODE_P25: RigMode.P25,
+        Hamlib.RIG_MODE_PKTAM: RigMode.PKTAM,
+        Hamlib.RIG_MODE_PKTFM: RigMode.PKTFM,
+        Hamlib.RIG_MODE_PKTFMN: RigMode.PKTFMN,
+        Hamlib.RIG_MODE_PKTLSB: RigMode.PKTLSB,
+        Hamlib.RIG_MODE_PKTSSB: RigMode.PKTSSB,
+        Hamlib.RIG_MODE_PKTUSB: RigMode.PKTUSB,
+        Hamlib.RIG_MODE_PSK: RigMode.PSK,
+        Hamlib.RIG_MODE_RTTY: RigMode.RTTY,
+        Hamlib.RIG_MODE_USB: RigMode.USB,
+        Hamlib.RIG_MODE_WFM: RigMode.WFM,
     }
 
     HAMLIB_VFO_MAP = {
@@ -44,6 +51,9 @@ class HamlibRig:
             self.rig.set_conf("serial_speed", str(baud))
 
         self.rig.open()
+
+    def close(self):
+        self.rig.close()
 
     # ------------------------------------------------------------
     # Frequency + VFO
@@ -205,6 +215,3 @@ class HamlibRig:
     # ------------------------------------------------------------
     # Cleanup
     # ------------------------------------------------------------
-
-    def close(self):
-        self.rig.close()

@@ -17,19 +17,25 @@ class VFO(str, Enum):
 
 
 class RigMode(str, Enum):
-    LSB = "LSB"
-    USB = "USB"
+    AM = "AM"
+    C4FM = "C4FM"
     CW = "CW"
     CWR = "CWR"
+    DSTAR = "DSTAR"
     FM = "FM"
-    AM = "AM"
-    DIG = "DIG"
-    PKT = "PKT"
+    FMN = "FMN"
+    LSB = "LSB"
+    P25 = "P25"
+    PKTAM = "PKTAM"
+    PKTFM = "PKTFM"
+    PKTFMN = "PKTFMN"
+    PKTLSB = "PKTLSB"
+    PKTSSB = "PKTSSB"
+    PKTUSB = "PKTUSB"
+    PSK = "PSK"
     RTTY = "RTTY"
-    RTTYR = "RTTYR"
-    SAM = "SAM"
-    DRM = "DRM"
-
+    USB = "USB"
+    WFM = "WFM"
 
 class PTTStateEnum(int, Enum):
     OFF = 0
