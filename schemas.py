@@ -30,7 +30,6 @@ class RigMode(str, Enum):
     PKTFM = "PKTFM"
     PKTFMN = "PKTFMN"
     PKTLSB = "PKTLSB"
-    PKTSSB = "PKTSSB"
     PKTUSB = "PKTUSB"
     PSK = "PSK"
     RTTY = "RTTY"
