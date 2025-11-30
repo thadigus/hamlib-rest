@@ -23,7 +23,6 @@ class HamlibRig:
         Hamlib.RIG_MODE_PKTFM: RigMode.PKTFM,
         Hamlib.RIG_MODE_PKTFMN: RigMode.PKTFMN,
         Hamlib.RIG_MODE_PKTLSB: RigMode.PKTLSB,
-        Hamlib.RIG_MODE_PKTSSB: RigMode.PKTSSB,
         Hamlib.RIG_MODE_PKTUSB: RigMode.PKTUSB,
         Hamlib.RIG_MODE_PSK: RigMode.PSK,
         Hamlib.RIG_MODE_RTTY: RigMode.RTTY,
