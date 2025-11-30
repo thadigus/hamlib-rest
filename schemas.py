@@ -47,13 +47,13 @@ class PowerStateEnum(int, Enum):
 # ==========================================================
 
 class InitRigRequest(BaseModel):
-    model: int = Field(..., description="Hamlib rig model number")
+    model: int = Field(None, description="Hamlib rig model number")
     port: Optional[str] = Field(None, description="Serial/USB device path")
     baud: Optional[int] = Field(None, description="Baud rate")
 
 
 class Frequency(BaseModel):
-    frequency: float = Field(..., description="Frequency in Hz")
+    frequency: float = Field(None, description="Frequency in Hz")
 
 
 class Mode(BaseModel):
@@ -62,8 +62,8 @@ class Mode(BaseModel):
 
 
 class LevelChange(BaseModel):
-    level_flag: int = Field(..., description="Hamlib RIG_LEVEL_* flag")
-    value: float = Field(..., description="Level value")
+    level_flag: int = Field(None, description="Hamlib RIG_LEVEL_* flag")
+    value: float = Field(None, description="Level value")
 
 
 class SplitConfig(BaseModel):

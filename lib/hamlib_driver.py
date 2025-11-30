@@ -1,4 +1,6 @@
 import Hamlib
+from Hamlib import Rig
+from schemas import RigMode, VFO
 
 class HamlibRig:
     """
@@ -6,6 +8,29 @@ class HamlibRig:
     Designed to provide a clean, Pythonic interface while
     exposing all common rig control capabilities Hamlib supports.
     """
+
+    HAMLIB_MODE_MAP = {
+        Hamlib.RIG_MODE_LSB: RigMode.LSB,
+        Hamlib.RIG_MODE_USB: RigMode.USB,
+        Hamlib.RIG_MODE_CW: RigMode.CW,
+        Hamlib.RIG_MODE_CWR: RigMode.CWR,
+        Hamlib.RIG_MODE_FM: RigMode.FM,
+        Hamlib.RIG_MODE_AM: RigMode.AM,
+        # Hamlib.RIG_MODE_DIG: RigMode.DIG,
+        # Hamlib.RIG_MODE_PKT: RigMode.PKT,
+        # Hamlib.RIG_MODE_RTTY: RigMode.RTTY,
+        # Hamlib.RIG_MODE_RTTYR: RigMode.RTTYR,
+        # Hamlib.RIG_MODE_SAM: RigMode.SAM,
+        # Hamlib.RIG_MODE_DRM: RigMode.DRM,
+    }
+
+    HAMLIB_VFO_MAP = {
+        Hamlib.RIG_VFO_CURR: VFO.curr,
+        Hamlib.RIG_VFO_A:    VFO.vfoa,
+        Hamlib.RIG_VFO_B:    VFO.vfob,
+        Hamlib.RIG_VFO_MAIN: VFO.vfo_main,
+        Hamlib.RIG_VFO_SUB:  VFO.vfo_sub,
+    }
 
     def __init__(self, rig_model, rig_port=None, baud=None):
         Hamlib.rig_set_debug(Hamlib.RIG_DEBUG_NONE)
@@ -31,10 +56,16 @@ class HamlibRig:
         return self.rig.set_freq(vfo, freq)
 
     def get_vfo(self):
-        return self.rig.get_vfo()
+        current_vfo = self.rig.get_vfo()
+        return self.HAMLIB_VFO_MAP.get(current_vfo)
+
 
     def set_vfo(self, vfo):
-        return self.rig.set_vfo(vfo)
+        for key, val in self.HAMLIB_VFO_MAP.items():
+            if val == vfo:
+                new_vfo = key
+                break
+        return self.rig.set_vfo(new_vfo)
 
     # ------------------------------------------------------------
     # Mode + Filter width
@@ -42,10 +73,18 @@ class HamlibRig:
 
     def get_mode(self, vfo=Hamlib.RIG_VFO_CURR):
         mode, width = self.rig.get_mode(vfo)
-        return {"mode": mode, "width": width}
+        return {
+            "mode": self.HAMLIB_MODE_MAP.get(mode),
+            "width": width
+        }
 
-    def set_mode(self, mode, width, vfo=Hamlib.RIG_VFO_CURR):
-        return self.rig.set_mode(vfo, mode, width)
+    
+    def set_mode(self, mode):
+        for key, val in self.HAMLIB_MODE_MAP.items():
+            if val == mode:
+                new_mode = key
+                break
+        return self.rig.set_mode(new_mode)
 
     # ------------------------------------------------------------
     # Generic Level controls (RF power, squelch, IF shift, etc.)
