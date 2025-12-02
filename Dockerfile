@@ -10,7 +10,7 @@ ADD ./schemas.py ./schemas.py
 ADD ./main.py ./main.py
 
 # Install dependencies (Python pip modules)
-RUN apt update; apt full-upgrade -y; apt install python3 python3-fastapi python3-serial python3-hamlib libhamlib-utils uvicorn -y
+RUN apt update; apt full-upgrade -y; apt install python3 python3-fastapi python3-serial python3-hamlib libhamlib-utils uvicorn git -y
 
 # Run main.py on container startup
 CMD [ "uvicorn", "--host", "0.0.0.0", "--port", "8080", "main:app" ]
