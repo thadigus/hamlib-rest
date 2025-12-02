@@ -82,6 +82,27 @@ docker run --privileged -p 8080:8080
 
 Navigate to: <http://localhost:8080/docs>
 
+### Development Container
+
+For a repeatable local dev environment, the repo includes a `.devcontainer` setup that reuses the provided `Dockerfile`.
+
+1. Install the **Dev Containers** (or **Remote Containers**) extension in VS Code.
+2. From this folder run **“Dev Containers: Reopen in Container”** (or run `devcontainer up --workspace-folder .` from the CLI).
+3. VS Code will build the container, mount the workspace at `/code`, and forward port `8080`.
+
+Once inside the container you can use the built-in Python interpreter (`/usr/bin/python3`) and launch the API with `uvicorn main:app --reload --host 0.0.0.0 --port 8080`.
+
+#### USB serial devices inside the devcontainer
+
+Hamlib needs direct access to USB serial devices. Dev Containers let you pass host devices into the container using per-user overrides so you do not have to commit machine-specific paths:
+
+1. Copy `.devcontainer/devcontainer.local.json.example` to `.devcontainer/devcontainer.local.json` (this file is gitignored).
+2. Edit the `runArgs` array to list each device you want to expose using the normal Docker `--device=/dev/ttyUSBx` syntax.
+3. (Optional) Keep the `mounts` entry or point it at any other `/dev/serial/by-id/...` path you want so the familiar udev symlinks are available inside the container.
+4. Rebuild/Reopen the devcontainer.
+
+The Docker Engine must also be able to reach the device (e.g. on Linux the user running Docker needs to be in the `dialout` group). Once the container restarts, the ports you listed in `devcontainer.local.json` appear inside `/dev` and Hamlib can use them normally.
+
 ---
 
 # 🔐 Authentication

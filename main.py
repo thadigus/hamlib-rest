@@ -1,7 +1,7 @@
 # main.py
 from fastapi import FastAPI, Depends, Query
 from lib.auth import authenticate, require_session
-from lib.rig_manager import init_rig_for_session, get_rig
+from lib.rig_manager import get_rig, init_rig_for_session, close_all_rigs
 from schemas import (
     InitRigRequest, Frequency, Mode, LevelChange,
     SplitConfig, RIT, XIT, RepeaterConfig,
