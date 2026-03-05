@@ -1,16 +1,40 @@
-# Latest Ubuntu Docker container
-FROM ubuntu:latest
+FROM ubuntu:24.04 AS runtime
 
-# Set a working directory in the container for code and libraries
 WORKDIR /code
 
-# Copy all code and configurations into the container
-ADD ./lib/*.py ./lib/
-ADD ./schemas.py ./schemas.py
-ADD ./main.py ./main.py
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        jq \
+        libhamlib-utils \
+        python3 \
+        python3-fastapi \
+        python3-hamlib \
+        python3-serial \
+        uvicorn \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install dependencies (Python pip modules)
-RUN apt update; apt full-upgrade -y; apt install python3 python3-fastapi python3-serial python3-hamlib libhamlib-utils uvicorn git curl jq -y
+COPY ./lib ./lib
+COPY ./schemas.py ./schemas.py
+COPY ./main.py ./main.py
+COPY ./openapi.yaml ./openapi.yaml
+COPY ./README.md ./README.md
 
-# Run main.py on container startup
-CMD [ "uvicorn", "--host", "0.0.0.0", "--port", "8080", "main:app" ]
+EXPOSE 8080
+
+CMD ["uvicorn", "--host", "0.0.0.0", "--port", "8080", "main:app"]
+
+
+FROM runtime AS test
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        python3-httpx \
+        python3-pytest \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY ./pytest.ini ./pytest.ini
+COPY ./tests ./tests
+
+CMD ["pytest"]

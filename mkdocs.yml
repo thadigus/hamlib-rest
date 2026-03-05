@@ -1,0 +1,19 @@
+site_name: Hamlib REST API
+site_description: Documentation for the Hamlib FastAPI/OpenAPI server
+theme:
+  name: readthedocs
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Operations: operations.md
+  - OpenAPI: openapi.md
+  - API Commands: API_COMMANDS.md
+  - Architecture: ARCHITECTURE.md
+  - Deployment: DEPLOYMENT.md
+
+markdown_extensions:
+  - admonition
+  - tables
+  - toc:
+      permalink: true
