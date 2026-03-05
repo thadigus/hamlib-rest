@@ -28,7 +28,33 @@ def init_rig_for_session(session_id: str, model: int, port: str, baud: int):
         _rigs[session_id] = HamlibRig(
             rig_model=model,
             rig_port=port,
-            baud=baud
+            baud=baud,
+        )
+
+
+def init_rig_for_session_with_conf(
+    session_id: str,
+    model: int,
+    port: str | None,
+    baud: int | None,
+    conf: dict | None,
+):
+    """
+    Initialize a rig for a session with optional backend config map.
+    """
+    with _lock:
+        existing = _rigs.get(session_id)
+        if existing:
+            try:
+                existing.close()
+            except Exception:
+                pass
+
+        _rigs[session_id] = HamlibRig(
+            rig_model=model,
+            rig_port=port,
+            baud=baud,
+            conf=conf,
         )
 
 
@@ -56,6 +82,8 @@ def close_rig(session_id: str):
                 rig.close()
             except Exception:
                 pass
+            return {"status": "rig closed"}
+    return {"status": "no rig for session"}
 
 
 def close_all_rigs():

@@ -2,733 +2,1904 @@ openapi: 3.1.0
 info:
   title: Hamlib REST API Server
   description: REST API for Hamlib rig control
-  version: "1.0"
+  version: '1.1'
 paths:
   /login:
     post:
       tags:
-        - Auth
+      - Auth
       summary: Login
       operationId: login_login_post
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
               schema: {}
       security:
-        - HTTPBasic: []
+      - HTTPBasic: []
   /devices/usb:
     get:
       tags:
-        - System
+      - System
       summary: List USB serial devices
       operationId: list_usb_devices_devices_usb_get
       parameters:
-        - required: true
-          schema:
-            type: string
-            title: Session Id
-          name: session_id
-          in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
               schema: {}
-        "422":
+        '422':
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                $ref: '#/components/schemas/HTTPValidationError'
+  /hamlib/models:
+    get:
+      tags:
+      - Hamlib
+      summary: List known Hamlib rig models
+      operationId: list_hamlib_models_hamlib_models_get
+      parameters:
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /hamlib/constants:
+    get:
+      tags:
+      - Hamlib
+      summary: Enumerate Hamlib constant groups
+      operationId: list_hamlib_constants_hamlib_constants_get
+      parameters:
+      - description: Optional group filter
+        required: false
+        schema:
+          type: string
+          title: Group
+          description: Optional group filter
+        name: group
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /rig/init:
     post:
       tags:
-        - Rig
+      - Rig
       summary: Initialize rig connection
       operationId: rig_init_rig_init_post
       parameters:
-        - required: true
-          schema:
-            type: string
-            title: Session Id
-          name: session_id
-          in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/InitRigRequest"
+              $ref: '#/components/schemas/InitRigRequest'
         required: true
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
               schema: {}
-        "422":
+        '422':
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                $ref: '#/components/schemas/HTTPValidationError'
   /rig/close:
     post:
       tags:
-        - Rig
-      summary: Rig Close
+      - Rig
+      summary: Close rig connection
       operationId: rig_close_rig_close_post
       parameters:
-        - required: true
-          schema:
-            type: string
-            title: Session Id
-          name: session_id
-          in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
               schema: {}
-        "422":
+        '422':
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                $ref: '#/components/schemas/HTTPValidationError'
+  /rig/info:
+    get:
+      tags:
+      - Rig
+      summary: Get backend rig info string
+      operationId: get_rig_info_rig_info_get
+      parameters:
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /rig/capabilities:
+    get:
+      tags:
+      - Rig
+      summary: Get rig capability bitmasks decoded
+      operationId: get_rig_capabilities_rig_capabilities_get
+      parameters:
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /rig/frequency:
     get:
       tags:
-        - Frequency
+      - Frequency
       summary: Get Freq
       operationId: get_freq_rig_frequency_get
       parameters:
-        - required: true
-          schema:
-            type: string
-            title: Session Id
-          name: session_id
-          in: query
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/Frequency"
-        "422":
+              schema: {}
+        '422':
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                $ref: '#/components/schemas/HTTPValidationError'
     post:
       tags:
-        - Frequency
+      - Frequency
       summary: Set Freq
       operationId: set_freq_rig_frequency_post
       parameters:
-        - required: true
-          schema:
-            type: string
-            title: Session Id
-          name: session_id
-          in: query
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Frequency"
+              $ref: '#/components/schemas/Frequency'
         required: true
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/Frequency"
-        "422":
+              schema: {}
+        '422':
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                $ref: '#/components/schemas/HTTPValidationError'
   /rig/vfo:
     get:
       tags:
-        - VFO
+      - VFO
       summary: Get Vfo
       operationId: get_vfo_rig_vfo_get
       parameters:
-        - required: true
-          schema:
-            type: string
-            title: Session Id
-          name: session_id
-          in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
               schema: {}
-        "422":
+        '422':
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                $ref: '#/components/schemas/HTTPValidationError'
     post:
       tags:
-        - VFO
+      - VFO
       summary: Set Vfo
       operationId: set_vfo_rig_vfo_post
       parameters:
-        - required: true
-          schema:
-            type: string
-            title: Vfo
-          name: vfo
-          in: query
-        - required: true
-          schema:
-            type: string
-            title: Session Id
-          name: session_id
-          in: query
+      - required: true
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
               schema: {}
-        "422":
+        '422':
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                $ref: '#/components/schemas/HTTPValidationError'
   /rig/mode:
     get:
       tags:
-        - Mode
+      - Mode
       summary: Get Mode
       operationId: get_mode_rig_mode_get
       parameters:
-        - required: true
-          schema:
-            type: string
-            title: Session Id
-          name: session_id
-          in: query
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/Mode"
-        "422":
+              schema: {}
+        '422':
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                $ref: '#/components/schemas/HTTPValidationError'
     post:
       tags:
-        - Mode
+      - Mode
       summary: Set Mode
       operationId: set_mode_rig_mode_post
       parameters:
-        - required: true
-          schema:
-            type: string
-            title: Session Id
-          name: session_id
-          in: query
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Mode"
+              $ref: '#/components/schemas/Mode'
         required: true
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/Mode"
-        "422":
+              schema: {}
+        '422':
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                $ref: '#/components/schemas/HTTPValidationError'
+  /rig/passband:
+    get:
+      tags:
+      - Mode
+      summary: Get Passband
+      operationId: get_passband_rig_passband_get
+      parameters:
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Mode
+      summary: Set Passband
+      operationId: set_passband_rig_passband_post
+      parameters:
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Passband'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /rig/level:
     get:
       tags:
-        - Levels
+      - Levels
       summary: Get Level
       operationId: get_level_rig_level_get
       parameters:
-        - required: true
-          schema:
-            type: integer
-            title: Level Flag
-          name: level_flag
-          in: query
-        - required: true
-          schema:
-            type: string
-            title: Session Id
-          name: session_id
-          in: query
+      - required: true
+        schema:
+          type: string
+          title: Level
+        name: level
+        in: query
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
               schema: {}
-        "422":
+        '422':
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                $ref: '#/components/schemas/HTTPValidationError'
     post:
       tags:
-        - Levels
+      - Levels
       summary: Set Level
       operationId: set_level_rig_level_post
       parameters:
-        - required: true
-          schema:
-            type: string
-            title: Session Id
-          name: session_id
-          in: query
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/LevelChange"
+              $ref: '#/components/schemas/LevelChange'
         required: true
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
               schema: {}
-        "422":
+        '422':
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                $ref: '#/components/schemas/HTTPValidationError'
+  /rig/function:
+    get:
+      tags:
+      - Functions
+      summary: Get Function
+      operationId: get_function_rig_function_get
+      parameters:
+      - required: true
+        schema:
+          type: string
+          title: Function
+        name: function
+        in: query
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Functions
+      summary: Set Function
+      operationId: set_function_rig_function_post
+      parameters:
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FunctionState'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /rig/parameter:
+    get:
+      tags:
+      - Parameters
+      summary: Get Parameter
+      operationId: get_parameter_rig_parameter_get
+      parameters:
+      - required: true
+        schema:
+          type: string
+          title: Parameter
+        name: parameter
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Parameters
+      summary: Set Parameter
+      operationId: set_parameter_rig_parameter_post
+      parameters:
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParameterState'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /rig/split:
     get:
       tags:
-        - Split
+      - Split
       summary: Get Split
       operationId: get_split_rig_split_get
       parameters:
-        - required: true
-          schema:
-            type: string
-            title: Session Id
-          name: session_id
-          in: query
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/SplitConfig"
-        "422":
+              schema: {}
+        '422':
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                $ref: '#/components/schemas/HTTPValidationError'
     post:
       tags:
-        - Split
+      - Split
       summary: Set Split
       operationId: set_split_rig_split_post
       parameters:
-        - required: true
-          schema:
-            type: string
-            title: Session Id
-          name: session_id
-          in: query
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SplitConfig"
+              $ref: '#/components/schemas/SplitConfig'
         required: true
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
               schema: {}
-        "422":
+        '422':
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                $ref: '#/components/schemas/HTTPValidationError'
   /rig/rit:
     get:
       tags:
-        - RIT
+      - RIT
       summary: Get Rit
       operationId: get_rit_rig_rit_get
       parameters:
-        - required: true
-          schema:
-            type: string
-            title: Session Id
-          name: session_id
-          in: query
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/RIT"
-        "422":
+              schema: {}
+        '422':
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                $ref: '#/components/schemas/HTTPValidationError'
     post:
       tags:
-        - RIT
+      - RIT
       summary: Set Rit
       operationId: set_rit_rig_rit_post
       parameters:
-        - required: true
-          schema:
-            type: string
-            title: Session Id
-          name: session_id
-          in: query
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/RIT"
+              $ref: '#/components/schemas/RIT'
         required: true
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
               schema: {}
-        "422":
+        '422':
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                $ref: '#/components/schemas/HTTPValidationError'
   /rig/xit:
     get:
       tags:
-        - XIT
+      - XIT
       summary: Get Xit
       operationId: get_xit_rig_xit_get
       parameters:
-        - required: true
-          schema:
-            type: string
-            title: Session Id
-          name: session_id
-          in: query
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/XIT"
-        "422":
+              schema: {}
+        '422':
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                $ref: '#/components/schemas/HTTPValidationError'
     post:
       tags:
-        - XIT
+      - XIT
       summary: Set Xit
       operationId: set_xit_rig_xit_post
       parameters:
-        - required: true
-          schema:
-            type: string
-            title: Session Id
-          name: session_id
-          in: query
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/XIT"
+              $ref: '#/components/schemas/XIT'
         required: true
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
               schema: {}
-        "422":
+        '422':
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                $ref: '#/components/schemas/HTTPValidationError'
   /rig/repeater:
     get:
       tags:
-        - Repeater
+      - Repeater
       summary: Get Repeater
       operationId: get_repeater_rig_repeater_get
       parameters:
-        - required: true
-          schema:
-            type: string
-            title: Session Id
-          name: session_id
-          in: query
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/RepeaterConfig"
-        "422":
+              schema: {}
+        '422':
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                $ref: '#/components/schemas/HTTPValidationError'
     post:
       tags:
-        - Repeater
+      - Repeater
       summary: Set Repeater
       operationId: set_repeater_rig_repeater_post
       parameters:
-        - required: true
-          schema:
-            type: string
-            title: Session Id
-          name: session_id
-          in: query
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/RepeaterConfig"
+              $ref: '#/components/schemas/RepeaterConfig'
         required: true
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
               schema: {}
-        "422":
+        '422':
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                $ref: '#/components/schemas/HTTPValidationError'
   /rig/ptt:
     get:
       tags:
-        - PTT
+      - PTT
       summary: Get Ptt
       operationId: get_ptt_rig_ptt_get
       parameters:
-        - required: true
-          schema:
-            type: string
-            title: Session Id
-          name: session_id
-          in: query
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/PTTState"
-        "422":
+              schema: {}
+        '422':
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                $ref: '#/components/schemas/HTTPValidationError'
     post:
       tags:
-        - PTT
+      - PTT
       summary: Set Ptt
       operationId: set_ptt_rig_ptt_post
       parameters:
-        - required: true
-          schema:
-            type: string
-            title: Session Id
-          name: session_id
-          in: query
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PTTState"
+              $ref: '#/components/schemas/PTTState'
         required: true
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
               schema: {}
-        "422":
+        '422':
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                $ref: '#/components/schemas/HTTPValidationError'
   /rig/power:
     get:
       tags:
-        - Power
+      - Power
       summary: Get Power
       operationId: get_power_rig_power_get
       parameters:
-        - required: true
-          schema:
-            type: string
-            title: Session Id
-          name: session_id
-          in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/PowerState"
-        "422":
+              schema: {}
+        '422':
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                $ref: '#/components/schemas/HTTPValidationError'
     post:
       tags:
-        - Power
+      - Power
       summary: Set Power
       operationId: set_power_rig_power_post
       parameters:
-        - required: true
-          schema:
-            type: string
-            title: Session Id
-          name: session_id
-          in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PowerState"
+              $ref: '#/components/schemas/PowerState'
         required: true
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
               schema: {}
-        "422":
+        '422':
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                $ref: '#/components/schemas/HTTPValidationError'
+  /rig/memory:
+    get:
+      tags:
+      - Memory
+      summary: Get Memory
+      operationId: get_memory_rig_memory_get
+      parameters:
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Memory
+      summary: Set Memory
+      operationId: set_memory_rig_memory_post
+      parameters:
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemoryChannel'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /rig/memory/bank:
+    post:
+      tags:
+      - Memory
+      summary: Set Memory Bank
+      operationId: set_memory_bank_rig_memory_bank_post
+      parameters:
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemoryBank'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /rig/tone/ctcss:
+    get:
+      tags:
+      - Tone
+      summary: Get Ctcss Tone
+      operationId: get_ctcss_tone_rig_tone_ctcss_get
+      parameters:
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Tone
+      summary: Set Ctcss Tone
+      operationId: set_ctcss_tone_rig_tone_ctcss_post
+      parameters:
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ToneValue'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /rig/tone/ctcss-sql:
+    get:
+      tags:
+      - Tone
+      summary: Get Ctcss Sql
+      operationId: get_ctcss_sql_rig_tone_ctcss_sql_get
+      parameters:
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Tone
+      summary: Set Ctcss Sql
+      operationId: set_ctcss_sql_rig_tone_ctcss_sql_post
+      parameters:
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ToneValue'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /rig/tone/dcs:
+    get:
+      tags:
+      - Tone
+      summary: Get Dcs Code
+      operationId: get_dcs_code_rig_tone_dcs_get
+      parameters:
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Tone
+      summary: Set Dcs Code
+      operationId: set_dcs_code_rig_tone_dcs_post
+      parameters:
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DCSValue'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /rig/tone/dcs-sql:
+    get:
+      tags:
+      - Tone
+      summary: Get Dcs Sql
+      operationId: get_dcs_sql_rig_tone_dcs_sql_get
+      parameters:
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Tone
+      summary: Set Dcs Sql
+      operationId: set_dcs_sql_rig_tone_dcs_sql_post
+      parameters:
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DCSValue'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /rig/transceive:
+    get:
+      tags:
+      - Rig
+      summary: Get Transceive
+      operationId: get_transceive_rig_transceive_get
+      parameters:
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Rig
+      summary: Set Transceive
+      operationId: set_transceive_rig_transceive_post
+      parameters:
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransceiveState'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /rig/tuning-step:
+    get:
+      tags:
+      - Rig
+      summary: Get Tuning Step
+      operationId: get_tuning_step_rig_tuning_step_get
+      parameters:
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Rig
+      summary: Set Tuning Step
+      operationId: set_tuning_step_rig_tuning_step_post
+      parameters:
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TuningStep'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /rig/dcd:
+    get:
+      tags:
+      - Rig
+      summary: Get Dcd
+      operationId: get_dcd_rig_dcd_get
+      parameters:
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /rig/scan:
+    post:
+      tags:
+      - Rig
+      summary: Start Scan
+      operationId: start_scan_rig_scan_post
+      parameters:
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScanRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /rig/reset:
+    post:
+      tags:
+      - Rig
+      summary: Reset Rig
+      operationId: reset_rig_rig_reset_post
+      parameters:
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /rig/vfo/op:
+    post:
+      tags:
+      - VFO
+      summary: Run Vfo Op
+      operationId: run_vfo_op_rig_vfo_op_post
+      parameters:
+      - required: false
+        schema:
+          type: string
+          title: Vfo
+        name: vfo
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VFOOpRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /rig/dtmf/send:
+    post:
+      tags:
+      - DTMF
+      summary: Send Dtmf
+      operationId: send_dtmf_rig_dtmf_send_post
+      parameters:
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DTMFRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /rig/dtmf/recv:
+    get:
+      tags:
+      - DTMF
+      summary: Recv Dtmf
+      operationId: recv_dtmf_rig_dtmf_recv_get
+      parameters:
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /rig/morse/send:
+    post:
+      tags:
+      - Morse
+      summary: Send Morse
+      operationId: send_morse_rig_morse_send_post
+      parameters:
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MorseRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /rig/config/params:
     get:
       tags:
-        - Configuration
+      - Configuration
       summary: Get Config Params
       operationId: get_config_params_rig_config_params_get
       parameters:
-        - required: true
-          schema:
-            type: string
-            title: Session Id
-          name: session_id
-          in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
               schema: {}
-        "422":
+        '422':
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                $ref: '#/components/schemas/HTTPValidationError'
   /rig/config:
+    get:
+      tags:
+      - Configuration
+      summary: Get Config
+      operationId: get_config_rig_config_get
+      parameters:
+      - required: true
+        schema:
+          type: string
+          title: Name
+        name: name
+        in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
     post:
       tags:
-        - Configuration
+      - Configuration
       summary: Set Config
       operationId: set_config_rig_config_post
       parameters:
-        - required: true
-          schema:
-            type: string
-            title: Name
-          name: name
-          in: query
-        - required: true
-          schema:
-            type: string
-            title: Value
-          name: value
-          in: query
-        - required: true
-          schema:
-            type: string
-            title: Session Id
-          name: session_id
-          in: query
+      - required: true
+        schema:
+          type: string
+          title: Session Id
+        name: session_id
+        in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfigRequest'
+        required: true
       responses:
-        "200":
+        '200':
           description: Successful Response
           content:
             application/json:
               schema: {}
-        "422":
+        '422':
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/HTTPValidationError"
+                $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    ConfigRequest:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Config key
+        value:
+          type: string
+          title: Value
+          description: Config value
+      type: object
+      required:
+      - name
+      - value
+      title: ConfigRequest
+    DCSValue:
+      properties:
+        code:
+          type: integer
+          title: Code
+          description: DCS code
+      type: object
+      required:
+      - code
+      title: DCSValue
+    DTMFRequest:
+      properties:
+        digits:
+          type: string
+          title: Digits
+          description: DTMF digits to send
+      type: object
+      required:
+      - digits
+      title: DTMFRequest
     Frequency:
       properties:
         frequency:
@@ -737,13 +1908,28 @@ components:
           description: Frequency in Hz
       type: object
       required:
-        - frequency
+      - frequency
       title: Frequency
+    FunctionState:
+      properties:
+        function:
+          type: string
+          title: Function
+          description: Function constant name, e.g. RIG_FUNC_NB
+        state:
+          type: integer
+          title: State
+          description: 0 or 1
+      type: object
+      required:
+      - function
+      - state
+      title: FunctionState
     HTTPValidationError:
       properties:
         detail:
           items:
-            $ref: "#/components/schemas/ValidationError"
+            $ref: '#/components/schemas/ValidationError'
           type: array
           title: Detail
       type: object
@@ -757,134 +1943,238 @@ components:
         port:
           type: string
           title: Port
-          description: Serial/USB device path
+          description: Serial/USB/TCP rig path
         baud:
           type: integer
           title: Baud
-          description: Baud rate
+          description: Serial baud rate
+        conf:
+          type: object
+          title: Conf
+          description: Optional backend config parameters to apply on init
       type: object
       required:
-        - model
+      - model
       title: InitRigRequest
     LevelChange:
       properties:
-        level_flag:
-          type: integer
-          title: Level Flag
-          description: Hamlib RIG_LEVEL_* flag
+        level:
+          type: string
+          title: Level
+          description: Level constant name, e.g. RIG_LEVEL_SQL
         value:
           type: number
           title: Value
           description: Level value
       type: object
       required:
-        - level_flag
-        - value
+      - level
+      - value
       title: LevelChange
+    MemoryBank:
+      properties:
+        bank:
+          type: integer
+          title: Bank
+          description: Memory bank number
+      type: object
+      required:
+      - bank
+      title: MemoryBank
+    MemoryChannel:
+      properties:
+        channel:
+          type: integer
+          title: Channel
+          description: Memory channel number
+      type: object
+      required:
+      - channel
+      title: MemoryChannel
     Mode:
       properties:
         mode:
-          allOf:
-            - $ref: "#/components/schemas/RigMode"
-          description: Operating mode (USB, FM, AM, etc.)
+          type: string
+          title: Mode
+          description: Mode name, e.g. USB or RIG_MODE_USB
         width:
           type: integer
           title: Width
-          description: Filter width
+          description: Filter width / passband in Hz
       type: object
       required:
-        - mode
-        - width
+      - mode
       title: Mode
+    MorseRequest:
+      properties:
+        message:
+          type: string
+          title: Message
+          description: Morse text to send
+      type: object
+      required:
+      - message
+      title: MorseRequest
     PTTState:
       properties:
         state:
-          $ref: "#/components/schemas/PTTStateEnum"
+          title: State
+          description: PTT state (bool/int/name)
       type: object
       required:
-        - state
+      - state
       title: PTTState
-    PTTStateEnum:
-      type: integer
-      enum:
-        - 0
-        - 1
-      title: PTTStateEnum
-      description: An enumeration.
+    ParameterState:
+      properties:
+        parameter:
+          type: string
+          title: Parameter
+          description: Parameter constant name, e.g. RIG_PARM_TIME
+        value:
+          type: number
+          title: Value
+          description: Parameter value
+      type: object
+      required:
+      - parameter
+      - value
+      title: ParameterState
+    Passband:
+      properties:
+        width:
+          type: integer
+          title: Width
+          description: Passband width in Hz
+      type: object
+      required:
+      - width
+      title: Passband
     PowerState:
       properties:
         state:
-          $ref: "#/components/schemas/PowerStateEnum"
+          title: State
+          description: Power state (int/name)
       type: object
       required:
-        - state
+      - state
       title: PowerState
-    PowerStateEnum:
-      type: integer
-      enum:
-        - 0
-        - 1
-        - 2
-      title: PowerStateEnum
-      description: An enumeration.
     RIT:
       properties:
         offset:
           type: integer
           title: Offset
+          description: RIT offset in Hz
       type: object
       required:
-        - offset
+      - offset
       title: RIT
     RepeaterConfig:
       properties:
         shift:
-          type: integer
+          type: string
           title: Shift
+          description: RIG_RPT_SHIFT_* value
         offset:
           type: integer
           title: Offset
+          description: Repeater offset in Hz
       type: object
       title: RepeaterConfig
-    RigMode:
-      type: string
-      enum:
-        - LSB
-        - USB
-        - CW
-        - CWR
-        - FM
-        - AM
-        - DIG
-        - PKT
-        - RTTY
-        - RTTYR
-        - SAM
-        - DRM
-      title: RigMode
-      description: An enumeration.
+    ResetRequest:
+      properties:
+        reset:
+          type: string
+          title: Reset
+          description: Reset type, e.g. RIG_RESET_SOFT
+      type: object
+      required:
+      - reset
+      title: ResetRequest
+    ScanRequest:
+      properties:
+        scan:
+          type: string
+          title: Scan
+          description: Scan type, e.g. RIG_SCAN_MEM
+        channel:
+          type: integer
+          title: Channel
+          description: Optional channel index
+          default: 0
+      type: object
+      required:
+      - scan
+      title: ScanRequest
     SplitConfig:
       properties:
+        enabled:
+          type: boolean
+          title: Enabled
+          description: Split on/off
         tx_freq:
           type: number
           title: Tx Freq
+          description: TX frequency in Hz
         tx_vfo:
           type: string
           title: Tx Vfo
+          description: TX VFO name
         mode:
-          $ref: "#/components/schemas/RigMode"
+          type: string
+          title: Mode
+          description: TX mode
         width:
           type: integer
           title: Width
+          description: TX passband width in Hz
       type: object
       title: SplitConfig
+    ToneValue:
+      properties:
+        tone:
+          type: integer
+          title: Tone
+          description: Tone value
+      type: object
+      required:
+      - tone
+      title: ToneValue
+    TransceiveState:
+      properties:
+        state:
+          title: State
+          description: Transceive mode
+      type: object
+      required:
+      - state
+      title: TransceiveState
+    TuningStep:
+      properties:
+        step:
+          type: integer
+          title: Step
+          description: Tuning step in Hz
+      type: object
+      required:
+      - step
+      title: TuningStep
+    VFOOpRequest:
+      properties:
+        op:
+          type: string
+          title: Op
+          description: VFO operation, e.g. RIG_OP_UP
+      type: object
+      required:
+      - op
+      title: VFOOpRequest
     ValidationError:
       properties:
         loc:
           items:
             anyOf:
-              - type: string
-              - type: integer
+            - type: string
+            - type: integer
           type: array
           title: Location
         msg:
@@ -895,18 +2185,19 @@ components:
           title: Error Type
       type: object
       required:
-        - loc
-        - msg
-        - type
+      - loc
+      - msg
+      - type
       title: ValidationError
     XIT:
       properties:
         offset:
           type: integer
           title: Offset
+          description: XIT offset in Hz
       type: object
       required:
-        - offset
+      - offset
       title: XIT
   securitySchemes:
     HTTPBasic:

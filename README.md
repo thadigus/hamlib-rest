@@ -23,6 +23,32 @@ All rig commands are exposed as **REST endpoints**, and the server includes **se
 
 ---
 
+# 📚 Docs
+
+This repo includes a static docs site in `docs/` with:
+
+* Project overview (`docs/index.md`)
+* Getting started guide (`docs/getting-started.md`)
+* Operations/command coverage (`docs/operations.md`)
+* OpenAPI reference (`docs/openapi.md`)
+* Deployment guide (`docs/DEPLOYMENT.md`)
+* Architecture notes (`docs/ARCHITECTURE.md`)
+* Command reference (`docs/API_COMMANDS.md`)
+
+For deployment, use the included GitHub Pages workflow:
+
+* `.github/workflows/pages.yml`
+* `mkdocs.yml`
+
+The docs site is generated with MkDocs using the ReadTheDocs theme.
+
+See:
+
+* `docs/README.md`
+* `docs/API_COMMANDS.md`
+
+---
+
 # 🚀 Features
 
 ### ✔ Full Hamlib Capability Exposure
@@ -51,6 +77,24 @@ Navigate to: <http://localhost:8080/docs>
 
 To explore and interact with all rig commands.
 
+### ✔ Unit Tests + Container CI
+
+The repo includes pytest-based unit tests and CI workflows that:
+
+* Build a test image
+* Run all unit tests inside the container with verbose output and timing
+* Upload pytest reports (`pytest.log` and `pytest.xml`) as workflow artifacts
+* Build and publish runtime image to GHCR after test pass
+* Workflows:
+  * `.github/workflows/ci-image.yml`
+  * `.github/workflows/pages.yml`
+
+Run tests locally:
+
+```bash
+pytest
+```
+
 ---
 
 # 📁 Project Structure
@@ -60,9 +104,11 @@ To explore and interact with all rig commands.
 ├── main.py                    # FastAPI application with all endpoints
 ├── lib/
 │   ├── auth.py                # Session authentication
-│   ├── hamlib_rig.py          # Pythonic wrapper around Hamlib.Rig
+│   ├── hamlib_driver.py       # Pythonic wrapper around Hamlib.Rig
+│   ├── hamlib_constants.py    # Hamlib enum/model introspection helpers
 │   └── rig_manager.py         # Rig lifecycle management
 ├── schemas.py                 # Pydantic models for request/response bodies
+├── docs/                      # Static docs site
 ├── Dockerfile                 # Docker file to build the project and run in a container
 └── README.md                  # This file
 ```
