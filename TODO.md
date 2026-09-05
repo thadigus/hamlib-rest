@@ -16,7 +16,7 @@
 
 ---
 
-### 📡 **Frequency / VFO / Split / RIT / XIT / PTT**
+### **Frequency / VFO / Split / RIT / XIT / PTT**
 
 | Cmd   | Meaning             | Arguments     | Notes                               |
 | ----- | ------------------- | ------------- | ----------------------------------- |
@@ -27,7 +27,7 @@
 
 ---
 
-### 🎙 **Mode / Passband / AGC / Squelch**
+### **Mode / Passband / AGC / Squelch**
 
 | Cmd   | Meaning      | Arguments             |
 | ----- | ------------ | --------------------- |
@@ -40,7 +40,7 @@
 
 ---
 
-### 🔊 **Audio: Volume / AF Gain / IF Gain / RF Gain**
+### **Audio: Volume / AF Gain / IF Gain / RF Gain**
 
 | Cmd   | Meaning                    | Arguments         |                                       |
 | ----- | -------------------------- | ----------------- | ------------------------------------- |
@@ -51,7 +51,7 @@
 
 ---
 
-### 📶 **Filters / IF / Notch / Noise Reduction / Speech Processing**
+### **Filters / IF / Notch / Noise Reduction / Speech Processing**
 
 | Cmd   | Meaning              | Arguments |
 | ----- | -------------------- | --------- |
@@ -68,7 +68,7 @@
 
 ---
 
-### 🛰 **Rotor / Satellite / RIT/XIT Reset**
+### **Rotor / Satellite / RIT/XIT Reset**
 
 | Cmd   | Meaning                        | Arguments |
 | ----- | ------------------------------ | --------- |
@@ -77,7 +77,7 @@
 
 ---
 
-### 🔁 **Memories / Channels**
+### **Memories / Channels**
 
 | Cmd   | Meaning                     | Arguments   |
 | ----- | --------------------------- | ----------- |
@@ -88,7 +88,7 @@
 
 ---
 
-### 📡 **CTCSS / DCS / Tone Control**
+### **CTCSS / DCS / Tone Control**
 
 | Cmd   | Meaning        | Arguments     |
 | ----- | -------------- | ------------- |
@@ -101,7 +101,7 @@
 
 ---
 
-### 🔧 **Power / Attenuator / Preamp / Transceive**
+### **Power / Attenuator / Preamp / Transceive**
 
 | Cmd   | Meaning             | Arguments |
 | ----- | ------------------- | --------- |

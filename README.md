@@ -1,4 +1,4 @@
-# 📡 Hamlib REST API Server
+# Hamlib REST API Server
 
 ### **This is not a client application.**
 
@@ -23,7 +23,7 @@ All rig commands are exposed as **REST endpoints**, and the server includes **se
 
 ---
 
-# 📚 Docs
+# Docs
 
 This repo includes a static docs site in `docs/` with:
 
@@ -49,9 +49,9 @@ See:
 
 ---
 
-# 🚀 Features
+# Features
 
-### ✔ Full Hamlib Capability Exposure
+### Full Hamlib Capability Exposure
 
 Every major rig control function is wrapped:
 
@@ -66,18 +66,18 @@ Every major rig control function is wrapped:
 * get/set levels
 * Hamlib configuration parameters
 
-### ✔ Session-based Rig Instances
+### Session-based Rig Instances
 
 Each authenticated user session maintains its own rig object.
 Multiple rigs / users can operate in parallel.
 
-### ✔ Auto-Generated Swagger UI
+### Auto-Generated Swagger UI
 
 Navigate to: <http://localhost:8080/docs>
 
 To explore and interact with all rig commands.
 
-### ✔ Unit Tests + Container CI
+### Unit Tests + Container CI
 
 The repo includes pytest-based unit tests and CI workflows that:
 
@@ -97,7 +97,7 @@ pytest
 
 ---
 
-# 📁 Project Structure
+# Project Structure
 
 ```
 .
@@ -115,7 +115,7 @@ pytest
 
 ---
 
-# 🔧 Installation
+# Installation
 
 ### Docker Implementation (Recommended)
 
@@ -151,7 +151,7 @@ The Docker Engine must also be able to reach the device (e.g. on Linux the user 
 
 ---
 
-# 🔐 Authentication
+# Authentication
 
 This server uses simple session-based authentication.
 
@@ -181,7 +181,7 @@ each session gets its own rig instance.
 
 ---
 
-# ⚙️ Initialize the Rig
+# Initialize the Rig
 
 Before sending rig commands you must initialize it:
 
@@ -203,7 +203,7 @@ Supports any Hamlib rig model number.
 
 ---
 
-# 📡 Rig Commands Overview
+# Rig Commands Overview
 
 Once initialized, you can:
 
@@ -284,7 +284,7 @@ POST /rig/config
 
 ---
 
-# 🔥 Example Use Case
+# Example Use Case
 
 This REST server is ideal for:
 
@@ -297,7 +297,7 @@ This REST server is ideal for:
 
 ---
 
-# 🤝 Contributing
+# Contributing
 
 Pull requests are welcome!
 Please open an issue for:
@@ -308,6 +308,6 @@ Please open an issue for:
 
 ---
 
-# 📄 License
+# License
 
 MIT License — Free to use in any project.
