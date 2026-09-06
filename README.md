@@ -79,15 +79,17 @@ To explore and interact with all rig commands.
 
 ### Unit Tests + Container CI
 
-The repo includes pytest-based unit tests and CI workflows that:
+The repo includes pytest-based unit tests. CI runs on a self-hosted Forgejo
+instance; the GitHub mirror publishes images for public consumption.
 
-* Build a test image
-* Run all unit tests inside the container with verbose output and timing
-* Upload pytest reports (`pytest.log` and `pytest.xml`) as workflow artifacts
-* Build and publish runtime image to GHCR after test pass
-* Workflows:
-  * `.github/workflows/ci-image.yml`
-  * `.github/workflows/pages.yml`
+* `.forgejo/workflows/ci.yml` - every branch push runs `pytest`, then builds
+  the `runtime` image with kaniko. Pushes to `main` also publish
+  `git.turnerservices.cloud/thadigus/hamlib-rest` as `:latest` and `:<sha>`.
+* `.github/workflows/ci.yml` - pushes to `main` run the same test and build,
+  publishing `ghcr.io/thadigus/hamlib-rest`.
+* `.github/workflows/pages.yml` - publishes `docs/` to GitHub Pages.
+* `.forgejo/workflows/renovate.yml` with `renovate.json` - opens dependency
+  PRs, including the Hamlib release pinned in `flake.nix`.
 
 Run tests locally:
 

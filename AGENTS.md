@@ -10,6 +10,9 @@ infrastructure - adapt accordingly.
 2. **Planning assistance via research** - search for Hamlib/rigctl
    documentation (hamlib docs, rigctl man page), protocol details (CI-V,
    serial), and prior art; return findings with sources.
+3. **Version checks** - when pinning a tool or package version, look up
+   the latest release with a web search first; never trust a remembered
+   version or tag.
 
 Lean on the Hamlib documentation and the OpenAPI contract
 (`openapi.yaml`) rather than internal knowledge alone; verify rig behavior
@@ -85,9 +88,12 @@ code and docs, and drift between code and `openapi.yaml`.
   `python3-httpx`).
 - Run the server: `uvicorn main:app --host 0.0.0.0 --port 8080`
   (Swagger UI at `http://localhost:8080/docs`).
-- Run tests: `pytest` (configured in `pytest.ini`). CI runs them inside
-  the `test` image: `docker build --target test -t hamlib-rest:test . &&
-  docker run --rm hamlib-rest:test`.
+- Run tests: `pytest` (configured in `pytest.ini`). The `test` image works
+  locally too: `docker build --target test -t hamlib-rest:test . &&
+  docker run --rm hamlib-rest:test`. CI runners have no Docker daemon, so
+  CI installs the same distro packages into an `ubuntu:24.04` job container
+  and runs `pytest` there; keep that package list in step with the
+  `Dockerfile`.
 - Live experimentation: start the server, then source
   `debug/init_dummy_rig.sh` to open a dummy rig (model 1, `/dev/null`) and
   use `$SESSION_ID` with `curl`.

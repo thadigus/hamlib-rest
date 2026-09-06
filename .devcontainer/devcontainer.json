@@ -1,11 +1,11 @@
 {
   "name": "hamlib-rest",
   "build": {
-    "dockerfile": "../Dockerfile",
+    "dockerfile": "devcontainer/Dockerfile",
     "context": ".."
   },
-  "workspaceFolder": "/code",
-  "workspaceMount": "source=${localWorkspaceFolder},target=/code,type=bind",
+  "workspaceFolder": "/workspaces/hamlib-rest",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/hamlib-rest,type=bind",
   "forwardPorts": [
     8080
   ],
@@ -17,10 +17,12 @@
         "terminal.integrated.shell.linux": "/bin/bash"
       },
       "extensions": [
-        "ms-python.python",
-        "ms-python.vscode-pylance",
-        "openai.chatgpt"
+        "NixOS.nix-build"
       ]
     }
+  },
+  "postCreateCommand": "bash devcontainer/nix-dev.sh",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {}
   }
 }

@@ -1,6 +1,6 @@
 name: Deploy Docs (GitHub Pages)
 
-"on":
+on:
   push:
     branches:
       - main

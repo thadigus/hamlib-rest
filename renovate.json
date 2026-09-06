@@ -1,0 +1,33 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard"
+  ],
+  "labels": ["dependencies"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Hamlib release tarball pinned in flake.nix",
+      "managerFilePatterns": ["/^flake\\.nix$/"],
+      "matchStrings": [
+        "hamlib/hamlib/archive/refs/tags/(?<currentValue>[^\"]+)\\.tar\\.gz"
+      ],
+      "depNameTemplate": "hamlib/hamlib",
+      "datasourceTemplate": "github-releases",
+      "versioningTemplate": "loose"
+    }
+  ],
+  "postUpgradeTasks": {
+    "commands": [".forgejo/update-hamlib-hash.sh"],
+    "fileFilters": ["flake.nix"],
+    "executionMode": "update"
+  },
+  "packageRules": [
+    {
+      "matchDepNames": ["hamlib/hamlib"],
+      "commitMessageTopic": "Hamlib",
+      "commitMessageExtra": "to {{newVersion}}"
+    }
+  ]
+}

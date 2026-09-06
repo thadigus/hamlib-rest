@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  REGISTRY: git.turnerservices.cloud
+
+jobs:
+  test:
+    runs-on: docker
+    container:
+      image: ubuntu:24.04
+    steps:
+      - name: Checkout
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq --no-install-recommends ca-certificates git
+          git init -q .
+          git remote add origin "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}.git"
+          git fetch -q --depth 1 origin "${GITHUB_SHA}"
+          git checkout -q FETCH_HEAD
+
+      - name: Install test dependencies
+        run: |
+          apt-get install -y -qq --no-install-recommends \
+            curl \
+            jq \
+            libhamlib-utils \
+            python3 \
+            python3-fastapi \
+            python3-hamlib \
+            python3-httpx \
+            python3-pytest \
+            python3-serial \
+            uvicorn
+
+      - name: Run tests
+        run: pytest
+
+  build:
+    needs: test
+    runs-on: docker
+    container:
+      image: gcr.io/kaniko-project/executor:debug
+    permissions:
+      contents: read
+      packages: write
+    defaults:
+      run:
+        shell: sh
+
+    steps:
+      - name: Authenticate to registry
+        if: github.ref == 'refs/heads/main'
+        env:
+          REGISTRY_USER: ${{ github.repository_owner }}
+          REGISTRY_TOKEN: ${{ secrets.PACKAGE_TOKEN }}
+        run: |
+          set -eu
+          mkdir -p /kaniko/.docker
+          printf '{"auths":{"%s":{"auth":"%s"}}}' \
+            "$REGISTRY" \
+            "$(printf '%s:%s' "$REGISTRY_USER" "$REGISTRY_TOKEN" | base64 | tr -d '\n')" \
+            > /kaniko/.docker/config.json
+
+      - name: Build runtime image
+        run: |
+          set -eu
+          IMAGE="${REGISTRY}/${GITHUB_REPOSITORY}"
+          if [ "$GITHUB_REF" = "refs/heads/main" ]; then
+            set -- --destination "${IMAGE}:latest" --destination "${IMAGE}:${GITHUB_SHA}"
+          else
+            set -- --no-push
+          fi
+          /kaniko/executor \
+            --context "git://${REGISTRY}/${GITHUB_REPOSITORY}.git#${GITHUB_REF}#${GITHUB_SHA}" \
+            --dockerfile ./Dockerfile \
+            --target runtime \
+            --label "org.opencontainers.image.source=${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}" \
+            --label "org.opencontainers.image.revision=${GITHUB_SHA}" \
+            "$@"
