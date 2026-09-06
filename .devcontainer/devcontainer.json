@@ -13,10 +13,12 @@
   "customizations": {
     "vscode": {
       "settings": {
-        "python.defaultInterpreterPath": "/usr/bin/python3",
+        "python.defaultInterpreterPath": "/usr/local/pyenv/shims/python",
         "terminal.integrated.shell.linux": "/bin/bash"
       },
       "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
         "NixOS.nix-build"
       ]
     }

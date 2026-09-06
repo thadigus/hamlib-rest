@@ -382,8 +382,6 @@ class HamlibRig:
         return str(self.rig.get_conf(name))
 
     def get_conf_params(self) -> list[dict[str, str]]:
-        # Hamlib's Python binding does not reliably expose confparam iteration,
-        # so this probes a practical list of common rigctl-style keys.
         params: list[dict[str, str]] = []
         for name in self.KNOWN_CONF_PARAMS:
             try:

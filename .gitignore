@@ -1,6 +1,6 @@
 **/__pycache__
 **/.pytest_cache
-.devcontainer/devcontainer.local.json
+.devcontainer/local.json
 nix/
 result
 /nix

@@ -1,14 +1,11 @@
-#!/bin/bash
-# This script initializes a dummy rig for debugging purposes.
-# Be sure to source this script with the following command:
-# . debug/init_dummy_rig.sh
-# Then you will be able to use echo $SESSION_ID to get the session ID in other scripts.
+#!/usr/bin/env sh
+# Initialize a dummy rig for debugging.
 
 read -p "Enter web credentials username: " USERNAME
 read -p "Enter web credentials password: " -s PASSWORD
 
 echo "Initializing dummy rig for debugging..."
-SESSION_ID=`curl -sS -k -u $USERNAME:$PASSWORD \
+SESSION_ID=`curl -sS -k -u "$USERNAME":"$PASSWORD" \
   -X 'POST' \
   'http://localhost:8080/login' \
   -H 'accept: application/json' \

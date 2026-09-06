@@ -1,19 +1,16 @@
-# auth.py
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from uuid import uuid4
-from typing import Dict
+
 import secrets
 
 security = HTTPBasic()
 
-# Simple user store (replace with DB if needed)
 VALID_USERS = {
     "admin": "password123",
 }
 
-# In-memory session store
-sessions: Dict[str, str] = {}  # session_id -> username
+sessions: dict[str, str] = {}
 
 
 def authenticate(credentials: HTTPBasicCredentials = Depends(security)):
@@ -32,14 +29,12 @@ def authenticate(credentials: HTTPBasicCredentials = Depends(security)):
             headers={"WWW-Authenticate": "Basic"},
         )
 
-    # Create a session token
     session_id = str(uuid4())
     sessions[session_id] = credentials.username
     return {"session_id": session_id}
 
 
-def require_session(session_id: str):
-    """Validate session token passed by client."""
+def require_session(session_id: str) -> str:
     if session_id not in sessions:
         raise HTTPException(status_code=401, detail="Invalid or expired session")
-    return sessions[session_id]  # return username associated with session
+    return sessions[session_id]

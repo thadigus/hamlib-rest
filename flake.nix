@@ -34,27 +34,22 @@
             ];
             configurePhase = ''
               autoreconf -fi
-              ./configure --prefix=$out --with-python-binding
+              ./configure --prefix=$out
             '';
             buildPhase = "make";
             installPhase = "make install";
           };
 
           hamlibPy = pkgs.runCommandLocal "python3-hamlib" {
-            buildInputs = [ ];
+            buildInputs = [ pkgs.dpkg pkgs.curl ];
           } ''
-            # Copy Python bindings from hamlib462 install
-            mkdir -p $out/lib/python3.13/site-packages
-            for d in $(find ${hamlib462}/lib -name 'python3.*' -type d 2>/dev/null); do
-              cp -r $d/* $out/lib/python3.13/site-packages/
-            done
-            if [ -d ${hamlib462}/lib64 ]; then
-              for d in $(find ${hamlib462}/lib64 -name 'python3.*' -type d 2>/dev/null); do
-                cp -r $d/* $out/lib/python3.13/site-packages/
-              done
-            fi
-            # Symlink .so files if they're in lib directly
-            find ${hamlib462}/lib -name '*.so' -exec cp {} $out/lib/python3.13/site-packages/ \; 2>/dev/null || true
+            ${pkgs.curl}/bin/curl -sL -o hamlib.deb "http://ftp.us.debian.org/debian/pool/main/h/hamlib/python3-hamlib_4.6.2-1+b1_arm64.deb"
+            
+            ${pkgs.dpkg}/bin/dpkg-deb -x hamlib.deb $out
+            
+            mkdir -p $out/lib/python3/dist-packages
+            mv $out/usr/lib/python3/dist-packages/* $out/lib/python3/dist-packages/
+            rm -rf $out/usr
           '';
 
           pythonEnv = python313.withPackages (pypkgs: [
@@ -64,7 +59,6 @@
             pypkgs.httpx
             pypkgs.pytest
             pypkgs.pyserial
-            hamlibPy
           ]);
 
           runtimeDeps = with pkgs; [
@@ -81,7 +75,7 @@
             ];
 
             config = {
-              workingDir = "/workspaces/hamlib-rest";
+              workingDir = "/code";
               exposedPorts = [ "8080" ];
               cmd = [
                 "${pythonEnv}/bin/uvicorn"
@@ -116,8 +110,10 @@
               hamlib462
             ];
             shellHook = ''
+              export PYTHONPATH="${hamlibPy}/lib/python3/dist-packages:$PYTHONPATH"
+              
               export LD_LIBRARY_PATH="${hamlib462}/lib:$LD_LIBRARY_PATH"
-
+              
               echo "Entering hamlib-rest development environment"
               echo "Run 'uvicorn main:app --host 0.0.0.0 --port 8080' to start the server"
             '';

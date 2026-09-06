@@ -39,11 +39,7 @@ from schemas import (
 )
 
 
-app = FastAPI(
-    title="Hamlib REST API Server",
-    version="1.1",
-    description="REST API for Hamlib rig control",
-)
+app = FastAPI()
 
 
 @app.exception_handler(ValueError)
@@ -65,7 +61,7 @@ def get_session_user(session_id: str = Query(...)):
     return require_session(session_id)
 
 
-@app.get("/devices/usb", tags=["System"], summary="List USB serial devices")
+@app.get("/devices/usb", tags=["System"])
 def list_usb_devices(user=Depends(get_session_user)):
     return [
         {"path": p.device, "description": p.description}
@@ -73,12 +69,12 @@ def list_usb_devices(user=Depends(get_session_user)):
     ]
 
 
-@app.get("/hamlib/models", tags=["Hamlib"], summary="List known Hamlib rig models")
+@app.get("/hamlib/models", tags=["Hamlib"])
 def list_hamlib_models(user=Depends(get_session_user)):
     return {"models": HamlibRig.models()}
 
 
-@app.get("/hamlib/constants", tags=["Hamlib"], summary="Enumerate Hamlib constant groups")
+@app.get("/hamlib/constants", tags=["Hamlib"])
 def list_hamlib_constants(
     group: str | None = Query(None, description="Optional group filter"),
     user=Depends(get_session_user),
@@ -91,7 +87,7 @@ def list_hamlib_constants(
     return {group: groups[group]}
 
 
-@app.post("/rig/init", tags=["Rig"], summary="Initialize rig connection")
+@app.post("/rig/init", tags=["Rig"])
 def rig_init(
     req: InitRigRequest,
     session_id: str = Query(...),
@@ -107,7 +103,7 @@ def rig_init(
     return {"status": "rig initialized"}
 
 
-@app.post("/rig/close", tags=["Rig"], summary="Close rig connection")
+@app.post("/rig/close", tags=["Rig"])
 def rig_close(session_id: str = Query(...), user=Depends(get_session_user)):
     return close_rig(session_id)
 
@@ -117,12 +113,12 @@ def shutdown_cleanup():
     close_all_rigs()
 
 
-@app.get("/rig/info", tags=["Rig"], summary="Get backend rig info string")
+@app.get("/rig/info", tags=["Rig"])
 def get_rig_info(session_id: str = Query(...), user=Depends(get_session_user)):
     return {"info": get_rig(session_id).get_info()}
 
 
-@app.get("/rig/capabilities", tags=["Rig"], summary="Get rig capability bitmasks decoded")
+@app.get("/rig/capabilities", tags=["Rig"])
 def get_rig_capabilities(session_id: str = Query(...), user=Depends(get_session_user)):
     return get_rig(session_id).get_capabilities()
 

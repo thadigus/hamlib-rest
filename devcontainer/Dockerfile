@@ -15,10 +15,11 @@ RUN sh <(curl -L https://nixos.org/nix/install) --daemon
 # Source Nix environment
 ENV PATH=/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin:$PATH
 
-# Create workspace directory (bind mount will overlay this)
-RUN mkdir -p /workspaces/hamlib-rest
+# Create workspace
+WORKDIR /code
 
-WORKDIR /workspaces/hamlib-rest
+# Copy project files
+COPY . .
 
 # Expose the app port
 EXPOSE 8080

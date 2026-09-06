@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -euo pipefail:
 
 # Post-create script for devcontainer
 # Installs Nix if needed and enters development environment
@@ -16,7 +16,7 @@ else
 fi
 
 # Enter development environment
-cd /workspaces/hamlib-rest
+cd /code
 nix develop --command true
 
 echo "=== Setup complete ==="
